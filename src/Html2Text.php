@@ -6,8 +6,13 @@ class Html2Text {
 
 	public static function defaultOptions() {
 		return array(
-			'ignore_errors' => false,
-			'drop_links'    => false,
+			'ignore_errors'        => false,
+			'drop_links'           => false,
+			'word_wrap'            => false, // Set to an integer to wrap
+			'force_newline_format' => false, // Set to "\r\n" for emails
+			'link_template'        => function($hypertext, $href = null) {
+				return !empty($href) ? "[$hypertext]($href)" : "[$hypertext]";
+			},
 		);
 	}
 
@@ -60,6 +65,14 @@ class Html2Text {
 
 		// process output for whitespace/newlines
 		$output = static::processWhitespaceNewlines($output);
+
+		if ($options['force_newline_format'] !== false) {
+			$output = preg_replace('~\R~u', $options['force_newline_format'], $output);
+		}
+
+		if (is_int($options['word_wrap'])) {
+			$output = wordwrap($output, $options['word_wrap']);
+		}
 
 		return $output;
 	}
@@ -390,11 +403,25 @@ class Html2Text {
 		// end whitespace
 		switch ($name) {
 			case "h1":
+				$output = trim($output);
+				$output = str_repeat('=', strlen($output)) . "\n"
+					. strtoupper($output) . "\n"
+					. str_repeat('=', strlen($output)) . "\n";
+				break;
+
 			case "h2":
+				$output = trim($output);
+				$output = strtoupper($output) . "\n"
+					. str_repeat('=', strlen($output)) . "\n";
+				break;
+
 			case "h3":
 			case "h4":
 			case "h5":
 			case "h6":
+				$output = strtoupper($output) . "\n";
+				break;
+
 			case "pre":
 			case "p":
 				// add two lines
@@ -436,7 +463,7 @@ class Html2Text {
 						if ($options['drop_links']) {
 							$output = "$output";
 						} else {
-							$output = "[$output]";
+							$output = $options['link_template']($output);
 						}
 					}
 				} else {
@@ -449,7 +476,7 @@ class Html2Text {
 							if ($options['drop_links']) {
 								$output = "$output";
 							} else {
-								$output = "[$output]($href)";
+								$output = $options['link_template']($output, $href);
 							}
 						} else {
 							// empty string
