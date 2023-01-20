@@ -8,6 +8,7 @@ class Html2Text {
 		return array(
 			'ignore_errors'        => false,
 			'drop_links'           => false,
+			'drop_images'          => true,
 			'char_set'             => 'auto',
 			'word_wrap'            => false, // Set to an integer to wrap
 			'force_newline_format' => false, // Set to "\r\n" for emails
@@ -267,7 +268,7 @@ class Html2Text {
 	/** @param array<string, bool | string> $options */
 	private static function iterateOverNode(\DOMNode $node, ?string $prevName, bool $in_pre, bool $is_office_document, array $options): string {
 		if ($node instanceof \DOMText) {
-		  // Replace whitespace characters with a space (equivilant to \s)
+			// Replace whitespace characters with a space (equivilant to \s)
 			if ($in_pre) {
 				$text = "\n" . trim(self::renderText($node->wholeText), "\n\r\t ") . "\n";
 
@@ -328,8 +329,8 @@ class Html2Text {
 			case "td":
 			case "th":
 				// add tab char to separate table fields
-			   $output = "\t";
-			   break;
+				$output = "\t";
+				break;
 
 			case "p":
 				// Microsoft exchange emails often include HTML which, when passed through
@@ -518,17 +519,19 @@ class Html2Text {
 				// does the next node require additional whitespace?
 				switch ($nextName) {
 					case "h1": case "h2": case "h3": case "h4": case "h5": case "h6":
-						$output .= "\n";
-						break;
+					$output .= "\n";
+					break;
 				}
 				break;
 
 			case "img":
-				// @phpstan-ignore-next-line
-				if ($node->getAttribute("title")) {
+				if ($options['drop_images']) {
+					$output = "";
+					// @phpstan-ignore-next-line
+				} elseif ($node->getAttribute("title")) {
 					// @phpstan-ignore-next-line
 					$output = "[" . $node->getAttribute("title") . "]";
-				// @phpstan-ignore-next-line
+					// @phpstan-ignore-next-line
 				} elseif ($node->getAttribute("alt")) {
 					// @phpstan-ignore-next-line
 					$output = "[" . $node->getAttribute("alt") . "]";
