@@ -15,3 +15,4 @@ Another line
 Yet another line
 
 [A link](http://foo.com)
+
