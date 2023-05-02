@@ -1,4 +1,6 @@
+=============
 Hello, World!
+=============
 
 This is some e-mail content. Even though it has whitespace and newlines, the e-mail converter will handle it correctly.
 
