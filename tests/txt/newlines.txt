@@ -12,7 +12,9 @@ How are you again?
 This is the end!
 Just kidding
 
-Header 1
+========
+HEADER 1
+========
 
 Some text
 ---------------------------------------------------------------
@@ -20,15 +22,16 @@ Some more text
 
 Paragraph tag!
 
-Header 2
+HEADER 2
+========
 
 ---------------------------------------------------------------
 
-Header 3
+HEADER 3
 
 Some text
 
-Header 4
+HEADER 4
 
 Paragraph tag!
 

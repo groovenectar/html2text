@@ -1,4 +1,6 @@
-Anchor tests
+============
+ANCHOR TESTS
+============
 
 Visit http://openiaml.org or openiaml.org or http://openiaml.org.
 

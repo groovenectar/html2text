@@ -45,7 +45,7 @@ class Html2Text {
 		// check all options are valid
 		foreach ($options as $key => $value) {
 			if (!in_array($key, array_keys(static::defaultOptions()))) {
-				throw new \InvalidArgumentException("Unknown html2text option '$key'. Valid options are " . implode(',', static::defaultOptions()));
+				throw new \InvalidArgumentException("Unknown html2text option '$key'. Valid options are " . implode(',', array_keys(static::defaultOptions())));
 			}
 		}
 
@@ -428,23 +428,25 @@ class Html2Text {
 		// end whitespace
 		switch ($name) {
 			case "h1":
+				$verticalSpaceAtStart = preg_match('#^\v+#', $output);
 				$output = trim($output);
-				$output = str_repeat('=', strlen($output)) . "\n"
+				$output = ($verticalSpaceAtStart ? "\n\n" : '') . str_repeat('=', strlen($output)) . "\n"
 					. strtoupper($output) . "\n"
-					. str_repeat('=', strlen($output)) . "\n";
+					. str_repeat('=', strlen($output)) . "\n\n";
 				break;
 
 			case "h2":
+				$verticalSpaceAtStart = preg_match('#^\v+#', $output);
 				$output = trim($output);
-				$output = strtoupper($output) . "\n"
-					. str_repeat('=', strlen($output)) . "\n";
+				$output = ($verticalSpaceAtStart ? "\n\n" : '') . strtoupper($output) . "\n"
+					. str_repeat('=', strlen($output)) . "\n\n";
 				break;
 
 			case "h3":
 			case "h4":
 			case "h5":
 			case "h6":
-				$output = strtoupper($output) . "\n";
+				$output = strtoupper($output) . "\n\n";
 				break;
 
 			case "pre":

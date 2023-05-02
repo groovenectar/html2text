@@ -1,4 +1,6 @@
-List tests
+==========
+LIST TESTS
+==========
 
 Add some lists.
 
@@ -6,7 +8,8 @@ Add some lists.
 - two
 - three
 
-An unordered list
+AN UNORDERED LIST
+=================
 
 - one
 - two
